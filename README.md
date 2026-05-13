@@ -1,4 +1,4 @@
-# SQL Test & Training (SQL 实战训练库)
+SQL 实战训练库
 
 欢迎来到我的 SQL 训练与测试代码仓库
 
