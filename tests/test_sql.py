@@ -61,6 +61,49 @@ class TestCreatOnFreshDb(unittest.TestCase):
             conn.close()
 
 
+class TestExpectedValues(unittest.TestCase):
+    """期望值断言：验证 SQL 计算正确（不只是能跑）。"""
+
+    def test_supplier_pass_rate(self):
+        conn = sqlite3.connect(str(ROOT / "project_v1.db"))
+        try:
+            rows = {
+                r[0]: r[3]
+                for r in conn.execute(
+                    "SELECT supplier, COUNT(*), "
+                    "SUM(CASE WHEN status='completed' THEN 1 ELSE 0 END), "
+                    "ROUND(CAST(SUM(CASE WHEN status='completed' THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100, 2) || '%' "
+                    "FROM labeling_tasks GROUP BY supplier"
+                )
+            }
+        finally:
+            conn.close()
+        self.assertEqual(rows["A厂"], "60.0%")
+        self.assertEqual(rows["B厂"], "40.0%")
+        self.assertEqual(rows["C厂"], "50.0%")
+        self.assertEqual(rows["D厂"], "0.0%")
+
+    def test_game_progress(self):
+        conn = sqlite3.connect(str(ROOT / "project_v1.db"))
+        try:
+            rows = {
+                r[0]: r
+                for r in conn.execute(
+                    "SELECT game_name, COUNT(*), "
+                    "SUM(CASE WHEN status='completed' THEN 1 ELSE 0 END), "
+                    "SUM(CASE WHEN status='rejected' THEN 1 ELSE 0 END), "
+                    "SUM(CASE WHEN status='waiting_review' THEN 1 ELSE 0 END) "
+                    "FROM labeling_tasks GROUP BY game_name"
+                )
+            }
+        finally:
+            conn.close()
+        self.assertEqual(rows["hogwarts"], ("hogwarts", 5, 3, 1, 1))
+        self.assertEqual(rows["dauntless"], ("dauntless", 5, 2, 1, 2))
+        self.assertEqual(rows["new_game_01"], ("new_game_01", 2, 1, 0, 1))
+        self.assertEqual(rows["new_game_02"], ("new_game_02", 1, 0, 1, 0))
+
+
 class TestOpsOnFreshDb(unittest.TestCase):
     """运维脚本（UPDATE/DELETE）会写数据，只能跑在临时库上，避免污染已提交的 .db。"""
 
