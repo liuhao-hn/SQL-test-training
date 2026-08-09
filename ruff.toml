@@ -1,0 +1,5 @@
+target-version = "py39"
+
+[lint]
+# 学习/实战脚本：查 F 级真实问题（未定义/未导入/无占位 f-string）
+select = ["F"]

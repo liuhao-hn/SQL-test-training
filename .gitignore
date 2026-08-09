@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.DS_Store
+# 生成的报表
+供应商绩效分析报告_*.xlsx

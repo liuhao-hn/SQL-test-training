@@ -1,4 +1,7 @@
-SQL 实战训练库
+# SQL 实战训练库
+
+![CI](https://github.com/liuhao-hn/SQL-test-training/actions/workflows/ci.yml/badge.svg)
+
 欢迎来到我的 SQL 训练与测试代码仓库
 本项目记录了我进行 SQL 数据库操作与数据分析的完整实战过程。仓库内包含了从零开始的数据库搭建、增删改查（CRUD）操作、多表关联查询（Join）、聚合统计分析，以及结合 Python 进行自动化数据处理的全套代码。
 仓库结构 (Repository Structure)
