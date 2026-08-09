@@ -27,6 +27,8 @@ jobs:
           python-version: '3.11'
       - name: 安装依赖
         run: pip install pandas openpyxl
+      - name: SQL 脚本验证测试
+        run: python -m unittest tests.test_sql
       - name: 数据库分析脚本冒烟
         run: |
           python -m py_compile main_analysis.py analysis_project_v2.py analysis_achevement_project_v2.py
